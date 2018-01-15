@@ -278,7 +278,7 @@ services:
     command: /bin/bash
     volumes:
         - /var/run/:/host/var/run/
-        - ./../chaincode/:/opt/gopath/src/github.com/
+        - ./chaincode:/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode
         - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
         - ./cli-setup:/opt/gopath/src/github.com/hyperledger/fabric/peer/cli-setup/
