@@ -19,6 +19,8 @@ peer channel create -o orderer.tender.com:7050 -c $CHANNEL_NAME -f ../channel-ar
 echo "Join Channel on peer0.announcer.com"
 peer channel join -b $CHANNEL_NAME.block
 
+echo "Join anchor peer for announcer.com"
+peer channel update -o orderer.tender.com:7050 -c $CHANNEL_NAME -f ../channel-artifacts/AnnouncerOrgAnchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER
 
 # join channel on peer1.announcer.com
 
@@ -45,6 +47,10 @@ export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric
 echo "Join Channel on peer0.bidder1.com"
 peer channel join -b $CHANNEL_NAME.block
 
+echo "Join anchor peer for bidder1.com"
+peer channel update -o orderer.tender.com:7050 -c $CHANNEL_NAME -f ../channel-artifacts/Bidder1OrgAnchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER
+
+
 # join channel on peer0.bidder1.com
 export CORE_PEER_ADDRESS=peer1.bidder1.com:7051
 export CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/bidder1.com/peers/peer1.bidder1.com/tls/server.crt
@@ -53,6 +59,7 @@ export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric
 
 echo "Join Channel on peer1.bidder1.com"
 peer channel join -b $CHANNEL_NAME.block
+
 
 # evaluator1.com
 export CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/evaluator1.com/users/Admin@evaluator1.com/msp
@@ -67,6 +74,9 @@ export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric
 echo "Join Channel on peer0.evaluator1.com"
 peer channel join -b $CHANNEL_NAME.block
 
+echo "Join anchor peer for evaluator1.com"
+peer channel update -o orderer.tender.com:7050 -c $CHANNEL_NAME -f ../channel-artifacts/Evaluator1OrgAnchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER
+
 # join channel on peer0.evaluator1.com
 export CORE_PEER_ADDRESS=peer1.evaluator1.com:7051
 export CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/evaluator1.com/peers/peer1.evaluator1.com/tls/server.crt
@@ -75,3 +85,5 @@ export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric
 
 echo "Join Channel on peer1.evaluator1.com"
 peer channel join -b $CHANNEL_NAME.block
+
+
