@@ -31,4 +31,6 @@ export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric
 # instantiate chaincode
 CORE_PEER_TLS_ENABLED=true
 # peer chaincode instantiate -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":["init","first", "value"]}' -P "OR ('Bidder1MSP.member', 'AnnouncerMSP.member')"
-peer chaincode instantiate -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":["init","first", "value"]}' -P "OR ('AnnouncerMSP.member')"
+
+peer chaincode instantiate -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":["first", "value"]}' -P "OR ('AnnouncerMSP.member')"
+
