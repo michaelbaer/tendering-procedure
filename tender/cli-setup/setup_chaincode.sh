@@ -24,7 +24,7 @@ export CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/pee
 export CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/announcer.com/peers/peer0.announcer.com/tls/server.key
 export CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/announcer.com/peers/peer0.announcer.com/tls/ca.crt
 
-# peer chaincode install -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -p $FOLDER_CHAINCODE
+peer chaincode install -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -p $FOLDER_CHAINCODE
 
 
 
