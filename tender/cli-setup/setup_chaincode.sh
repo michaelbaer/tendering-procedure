@@ -4,11 +4,13 @@ export CHANNEL_NAME=tenderchannel
 
 CATFILE_ORDERER=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/tender.com/orderers/orderer.tender.com/msp/tlscacerts/tlsca.tender.com-cert.pem
 
-NAME_CHAINCODE=mytestchaincode
-VERSION_CHAINCODE=1.0
+NAME_CHAINCODE=tenderingChaincode
+VERSION_CHAINCODE=0.8
 PWD=`pwd`
 # FOLDER_CHAINCODE=/opt/gopath/src/github.com/hyperledger/fabric/peer/chaincode/sample/ --> https://stackoverflow.com/questions/38472750/hyperledger-custom-chaincode-deployment-error
-FOLDER_CHAINCODE=github.com/hyperledger/fabric/peer/chaincode/sample/
+# FOLDER_CHAINCODE=github.com/hyperledger/fabric/peer/chaincode/sample/
+
+FOLDER_CHAINCODE=github.com/hyperledger/fabric/peer/chaincode/tendering/
 
 echo $FOLDER_CHAINCODE
 
@@ -30,7 +32,8 @@ peer chaincode install -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -p $FOLDER_CHAIN
 
 # instantiate chaincode
 CORE_PEER_TLS_ENABLED=true
-# peer chaincode instantiate -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":["init","first", "value"]}' -P "OR ('Bidder1MSP.member', 'AnnouncerMSP.member')"
+# peer chaincode instantiate -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":[]}' -P "OR ('AnnouncerMSP.member')"
 
-peer chaincode instantiate -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":["first", "value"]}' -P "OR ('AnnouncerMSP.member')"
 
+# update chaincode
+peer chaincode upgrade -o orderer.tender.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $CATFILE_ORDERER -C $CHANNEL_NAME -n $NAME_CHAINCODE -v $VERSION_CHAINCODE -c '{"Args":[]}'
