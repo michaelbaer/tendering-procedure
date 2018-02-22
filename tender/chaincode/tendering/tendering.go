@@ -3,7 +3,8 @@ package main
 import (
     "fmt"
     "bytes"
-    "encoding/json"
+	"encoding/json"
+	b64 "encoding/base64"
 
     "github.com/hyperledger/fabric/core/chaincode/shim"
     "github.com/hyperledger/fabric/protos/peer"
@@ -18,7 +19,8 @@ import (
 
 type Offer struct {
     Bidder string `json:"bidder"`
-    Amount string `json:"amount"`
+	Amount string `json:"amount"`
+	Creator string `json:"creator"`
 }
 
 
@@ -26,9 +28,18 @@ func (o *Offer)addOffer(stub shim.ChaincodeStubInterface, args []string) peer.Re
 
 	if len(args) != 3 {
 	  return shim.Error("Incorrect arguments. Expecting 3 arguments")
-    }
+	}
+	
+// TODO: Prüfen, dass Offer noch nicht existiert.
+
+	creator, err1 := stub.GetCreator()
+	if err1 != nil {
+		return shim.Error(err1.Error())
+	}
+	b64Creator := b64.StdEncoding.EncodeToString(creator)
+	fmt.Printf("- addOffer-creators:\n%s\n", b64Creator)
     
-    var offer = Offer{Bidder: args[1], Amount: args[2]}
+    var offer = Offer{Bidder: args[1], Amount: args[2], Creator: b64Creator}
 
     offerAsBytes, _ := json.Marshal(offer)
     err := stub.PutState(args[0], offerAsBytes)
@@ -43,12 +54,24 @@ func (o *Offer)changeOfferAmount(stub shim.ChaincodeStubInterface, args []string
 
 	if len(args) != 2 {
 	  return shim.Error("Incorrect arguments. Expecting 2 arguments")
-    }
+	}
+	
+	creator, err1 := stub.GetCreator()
+	if err1 != nil {
+		return shim.Error(err1.Error())
+	}
+	b64Creator := b64.StdEncoding.EncodeToString(creator)
+	fmt.Printf("- changeOfferAmount-creator:\n%s\n", b64Creator)
 
     offerAsBytes, _ := stub.GetState(args[0])
 	offer := Offer{}
 
 	json.Unmarshal(offerAsBytes, &offer)
+
+	if offer.Creator != b64Creator {
+		return shim.Error(fmt.Sprintf("Creator of the change function is not equal to creator of add function. \n%s\n \n%s\n", offer.Creator, b64Creator))
+	}
+
 	offer.Amount = args[1]
 
 	offerAsBytes, _ = json.Marshal(offer)
@@ -62,6 +85,21 @@ func (o *Offer)changeOfferAmount(stub shim.ChaincodeStubInterface, args []string
 }
 
 func (o *Offer)queryAllOffers(stub shim.ChaincodeStubInterface) peer.Response{
+
+
+	creator, erro := stub.GetCreator()
+	if erro != nil {
+		return shim.Error(erro.Error())
+	}
+	s := string(creator[:])
+	fmt.Printf("- queryAllOffers-creators:\n%s\n", s)
+
+	transient, err2 := stub.GetTransient()
+	if err2 != nil {
+		return shim.Error(erro.Error())
+	}
+	fmt.Printf("- queryAllOffers-transient:\n%s\n", transient)
+
     startKey := "offer0"
 	endKey := "offer999"
 
